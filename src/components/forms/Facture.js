@@ -3,10 +3,10 @@ import Produit from './facture/Produit'
 import axios from 'axios'
 import Client from './facture/Client'
 import Societe from './facture/Societe'
-import { downloadFilesURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { downloadPDFURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
 import { handleAdd, handleRemove } from '../../commun'
-
-
 import {
     Row,
     Col,
@@ -15,7 +15,6 @@ import {
     FormSelect,
     Form
 } from "shards-react";
-
 class Facture extends Component {
 
     state = {
@@ -24,10 +23,10 @@ class Facture extends Component {
         produit: [{ value: 0 }],
         formData: {
             signed: true,
-            typeName: "FACTURE",
+            typeName: this.props.type,
             data: {
                 "ref": "",
-                "societe": "Novelis",
+                "societe": "",
                 "adresse": "",
                 "tel": "",
                 "fixe": "",
@@ -50,9 +49,9 @@ class Facture extends Component {
         e.preventDefault();
         if (e.target.id === 'form') {
             let produits = []
-
+            let totalFacture = 0;
             this.state.produit.map((item, i) => {
-
+                totalFacture += e.target['qteProduit' + i].value * e.target['prixProduit' + i].value
                 const produit =
                 {
                     "name": e.target['nomProduit' + i].value,
@@ -68,10 +67,10 @@ class Facture extends Component {
             this.setState({
                 formData: {
                     signed: e.target.signature.value,
-                    type: "FACTURE",
+                    typeName: this.props.type,
                     data: {
                         "ref": e.target.numFacture.value,
-                        "nomS": e.target.nomSociete.value,
+                        "nomS": "Novelis",
                         "adresseS": e.target.adresseSociete.value,
                         "telS": e.target.telSociete.value,
                         "fixeS": '',
@@ -84,23 +83,35 @@ class Facture extends Component {
                         "dateFacturation": e.target.dateFacturation.value,
                         "datePaiement": e.target.datePaiement.value,
                         "description": e.target.description.value,
+                        "total": totalFacture + ' ' + e.target['devise' + 0].value,
                         produits: produits
                     }
                 }
             }, () => {
-                axios.post(apiURL, {
-                    responseType: 'arraybuffer',
+                axios.post(apiURL, null, {
                     headers: {
+                        "Authorization": localStorage.getItem("token"),
                         'Accept': 'application/pdf'
+                    },
+                    params: {
+                        data: this.state.formData
                     }
-                }, { params: { data: this.state.formData } }).then((response) => {
-                    if (response.status === 200) {
-                        this.setState({
-                            toggleDownloadBtn: true,
-                            generatedFileName: response.data
+                })
+                    .then((response) => {
+                        if (response.status === 200) {
+                            toast.success("Une nouvelle facture été crée !", {
+                                position: toast.POSITION.TOP_RIGHT,
+                            });
+                            this.setState({
+                                toggleDownloadBtn: true,
+                                generatedFileName: response.data
+                            });
+                        }
+                    }).catch(function (error) {
+                        toast.error(error.message, {
+                            position: toast.POSITION.TOP_RIGHT,
                         });
-                    }
-                });
+                    });
             }
             )
         }
@@ -117,7 +128,7 @@ class Facture extends Component {
 
                 <Row style={styles} >
                     <Col md="6">
-                        <h4>Produit</h4>
+                        <h5>Produit</h5>
                     </Col>
                 </Row>
                 {this.state.produit.map((field, idx) => {
@@ -138,36 +149,40 @@ class Facture extends Component {
                                 type="text"
                                 name="description"
                                 placeholder="Description"
+                                required
                             />
                         </Col>
                     </Row>
                     <Row>
-                        <Col md="5" className="form-group">
+                        <Col md="4" className="form-group">
+
+                            <label htmlFor="feSignature">Signature</label>
+                            <FormSelect name="signature" required>
+                                <option value="true">Oui</option>
+                                <option value="false">Non</option>
+                            </FormSelect>
+                        </Col>
+                        <Col md="4" className="form-group">
                             <label >Date de facturation</label>
 
                             <FormInput
                                 name="dateFacturation"
                                 type="date"
+                                required
                             />
                         </Col>
 
 
-                        <Col md="5" className="form-group">
+                        <Col md="4" className="form-group">
                             <label >Date de Paiement</label>
 
                             <FormInput
                                 name="datePaiement"
                                 type="date"
+                                required
                             />
                         </Col>
-                        <Col md="2" className="form-group">
 
-                            <label htmlFor="feSignature">Signature</label>
-                            <FormSelect name="signature">
-                                <option value="true">Oui</option>
-                                <option value="false">Non</option>
-                            </FormSelect>
-                        </Col>
                     </Row>
                 </fieldset>
                 <fieldset className="my-fieldset">
@@ -175,6 +190,7 @@ class Facture extends Component {
                     <Button outline theme="secondary" className="mb-2 mr-1" type="reset">Vider les champs</Button>
                     {this.state.toggleDownloadBtn ? <a href={downloadURL + this.state.generatedFileName} > <button title="Télécharger le fichier PDF généré" type="button" className="mb-2 mr-1 btn btn-outline-success"><i className="fa fa-download" aria-hidden="true"></i></button></a> : ""}
                 </fieldset>
+                <ToastContainer />
 
             </ Form>);
     }

@@ -3,7 +3,6 @@ import {
     Row,
     Col,
     FormSelect,
-    Form
 } from "shards-react";
 
 const Langue = (props) => {
@@ -14,7 +13,7 @@ const Langue = (props) => {
             <Row form>
                 <Col md="6" className="form-group" >
                     <label >Langue</label>
-                    <FormSelect name={"langue" + props.idx}>
+                    <FormSelect name={"langue" + props.idx} required>
                         <option value="" selected disabled>-</option>
                         <option value="Arabe">Arabe</option>
                         <option value="Anglais">Anglais</option>
@@ -25,13 +24,11 @@ const Langue = (props) => {
                 </Col>
                 <Col md="6" className="form-group" >
                     <label >Niveau</label>
-                    <FormSelect name={"niveau" + props.idx}>
+                    <FormSelect name={"niveau" + props.idx} required>
                         <option value="" selected disabled>-</option>
-                        <option value="Notions élémentaires">Notions élémentaires</option>
-                        <option value="Compétence professionnelle limitée">Compétence professionnelle limitée</option>
-                        <option value="Compétence professionnelle">Compétence professionnelle</option>
-                        <option value="Compétence professionnelle complète">Compétence professionnelle complète</option>
-                        <option value="Bilingue ou langue natale">Bilingue ou langue natale</option>
+                        <option >Notions élémentaires</option>
+                        <option >Compétence professionnelle complète</option>
+                        <option >Bilingue ou langue natale</option>
                     </FormSelect>
                 </Col>
             </Row>

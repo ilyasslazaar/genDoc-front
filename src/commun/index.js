@@ -13,4 +13,3 @@ export function handleRemove(i, fieldName) {
     currentState[fieldName] = values;
     this.setState(currentState)
 }
-

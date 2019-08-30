@@ -5,7 +5,6 @@ import {
     FormInput,
     FormTextarea,
     FormSelect,
-    Form
 } from "shards-react";
 import { years, months } from '../../../constants/defaultValues'
 const style = { color: "white" }
@@ -20,6 +19,7 @@ const Distinction = (props) => {
                         name={"titreDist" + props.idx}
                         type="text"
                         placeholder=""
+                        required
                     />
                 </Col>
                 <Col md="3" className="form-group" >
@@ -29,13 +29,14 @@ const Distinction = (props) => {
                         name={"lieuDist" + props.idx}
                         type="text"
                         placeholder=""
+                        required
                     />
                 </Col>
 
                 <Col md="2" className="form-group" >
                     <label >Date d’émission</label>
 
-                    <FormSelect name={"anneeDist" + props.idx}>
+                    <FormSelect name={"anneeDist" + props.idx} required>
                         <option disabled selected>Année</option>
                         {years.map((year) =>
 
@@ -44,7 +45,7 @@ const Distinction = (props) => {
                 </Col>
                 <Col md="2" className="form-group" >
                     <label style={style}>Mois d'émission</label>
-                    <FormSelect name={"moisDist" + props.idx}>
+                    <FormSelect name={"moisDist" + props.idx} required>
                         <option disabled selected>Mois</option>
                         {months.map((month) =>
 
@@ -62,6 +63,7 @@ const Distinction = (props) => {
                         name={"descriptionDist" + props.idx}
                         type="textarea"
                         placeholder=""
+                        required
                     />
                 </Col>
             </Row>

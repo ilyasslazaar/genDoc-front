@@ -9,7 +9,7 @@ const Client = (props) => {
         <div>
             <Row style={props.styles} >
                 <Col md="6">
-                    <h4>{props.title}</h4>
+                    <h5>{props.title}</h5>
                 </Col>
             </Row>
             <fieldset className="my-fieldset">
@@ -26,7 +26,7 @@ const Client = (props) => {
 
                     <Col md="6" className="form-group" >
 
-                        <label >Numéro de telephone</label>
+                        <label >Numéro de téléphone</label>
                         <FormInput
                             name="telClient"
                             type="text"

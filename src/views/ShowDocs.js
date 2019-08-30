@@ -1,24 +1,22 @@
 import React from "react";
-import { Container, Row, Col } from "shards-react";
+import { Container, Row } from "shards-react";
 
-import PageTitle from "../components/common/PageTitle";
-import UserDetails from "../components/user-profile-lite/UserDetails";
-import UserAccountDetails from "../components/user-profile-lite/UserAccountDetails";
+import PageTitle from "./../components/common/PageTitle";
 
-const ShowDocs = () => (
-  <Container fluid className="main-content-container px-4">
-    <Row noGutters className="page-header py-4">
-      <PageTitle title="User Profile" subtitle="Overview" md="12" className="ml-sm-auto mr-sm-auto" />
-    </Row>
-    <Row>
-      <Col lg="4">
-        <UserDetails />
-      </Col>
-      <Col lg="8">
-        <UserAccountDetails />
-      </Col>
-    </Row>
-  </Container>
-);
+import DocsTable from "../components/tables/DocsTable";
 
-export default ShowDocs;
+const ShowTypes = () => {
+  return (
+    <Container fluid className="main-content-container px-4">
+      <Row noGutters className="page-header py-4">
+        <PageTitle title="Afficher les documents" subtitle="show-Docs" className="text-sm-left mb-3" />
+      </Row>
+      <Row>
+        <DocsTable />
+      </Row>
+      <br />
+    </Container>
+  );
+};
+
+export default ShowTypes;

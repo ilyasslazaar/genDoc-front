@@ -1,11 +1,9 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import {
   Row,
   Col,
-  Form,
   FormInput,
   FormSelect,
-  Button
 } from "shards-react";
 
 const Responsable = () => {
@@ -14,7 +12,7 @@ const Responsable = () => {
       <Row form>
         <Col className="form-group" >
           <label htmlFor="fePrenomResponsable">Civilité</label>
-          <FormSelect name="civiliteResponsable">
+          <FormSelect name="civiliteResponsable" required>
             <option value="Mr">Mr</option>
             <option value="Mme">Mme</option>
           </FormSelect>
@@ -25,6 +23,7 @@ const Responsable = () => {
             name="nomResponsable"
             type="text"
             placeholder="Nom"
+            required
           />
         </Col>
       </Row>
@@ -35,6 +34,7 @@ const Responsable = () => {
             name="prenomResponsable"
             type="text"
             placeholder="Prénom"
+            required
           />
         </Col>
         <Col md="6" className="form-group">
@@ -43,6 +43,7 @@ const Responsable = () => {
             name="fonction"
             type="text"
             placeholder="Fonction"
+            required
           />
         </Col>
       </Row>

@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../assets/style.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Responsable from './responsable/Responsable'
-import { downloadFilesURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
+import { downloadPDFURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
 
 import {
   Row,
@@ -26,7 +28,7 @@ class AttestationDeStage extends Component {
     this.setState({
       formData: {
         "signed": event.target.signature.value,
-        "typeName": "ATTESTATION_DE_STAGE",
+        "typeName": this.props.type,
         "data": {
           "lieuLivraison": event.target.lieuLivraison.value,
           "dateLivraison": event.target.dateLivraison.value,
@@ -48,24 +50,30 @@ class AttestationDeStage extends Component {
         },
       }
     }, () => {
-      axios.post(apiURL, {
-        responseType: 'arraybuffer',
+      axios.post(apiURL, null, {
         headers: {
+          "Authorization": localStorage.getItem("token"),
           'Accept': 'application/pdf'
+        },
+        params: {
+          data: this.state.formData
         }
-      },
-        {
-          params: {
-            data: this.state.formData
-          }
-        }).then((response) => {
-          if (response.status == 200) {
-            this.setState({
-              toggleDownloadBtn: true,
-              generatedFileName: response.data
-            });
-          }
+      }).then((response) => {
+        if (response.status == 200) {
+          toast.success("Une nouvelle attestation de stage a été crée !", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+
+          this.setState({
+            toggleDownloadBtn: true,
+            generatedFileName: response.data
+          });
+        }
+      }).catch(function (error) {
+        toast.error(error.message, {
+          position: toast.POSITION.TOP_RIGHT,
         });
+      });
     }
     )
   }
@@ -93,7 +101,7 @@ class AttestationDeStage extends Component {
 
                 <label htmlFor="fePrenomStagiaire">Civilité</label>
 
-                <FormSelect onChange={this.handleChange} name="civiliteStagiaire">
+                <FormSelect onChange={this.handleChange} name="civiliteStagiaire" required>
                   <option value="Mr">Mr</option>
                   <option value="Mme">Mme</option>
                   <option value="Mlle">Mlle</option>
@@ -106,6 +114,7 @@ class AttestationDeStage extends Component {
                   type="text"
                   placeholder="Nom"
                   name="nomStagiaire"
+                  required
                 />
               </Col>
             </Row>
@@ -117,6 +126,7 @@ class AttestationDeStage extends Component {
                   name="prenomStagiaire"
                   type="text"
                   placeholder="Prénom"
+                  required
                 />
               </Col>
               <Col md="6" className="form-group">
@@ -125,6 +135,7 @@ class AttestationDeStage extends Component {
                   name="cinStagiaire"
                   type="text"
                   placeholder="N° CIN"
+                  required
                 />
               </Col>
             </Row>
@@ -135,14 +146,16 @@ class AttestationDeStage extends Component {
                 <FormInput
                   name="dateDebutStage"
                   type="date"
+                  required
                 />
               </Col>
               <Col md="6" className="form-group">
 
-                <label htmlFor="feFonctionStagiaire">Date de début de stage</label>
+                <label htmlFor="feFonctionStagiaire">Date de fin de stage</label>
                 <FormInput
                   name="dateFinStage"
                   type="date"
+                  required
                 />
               </Col>
             </Row>
@@ -151,7 +164,7 @@ class AttestationDeStage extends Component {
               <Col md="4" className="form-group">
 
                 <label htmlFor="feSignature">Signature</label>
-                <FormSelect name="signature">
+                <FormSelect name="signature" required>
                   <option value="true">Oui</option>
                   <option value="false">Non</option>
                 </FormSelect>
@@ -163,6 +176,7 @@ class AttestationDeStage extends Component {
                   name="dateLivraison"
                   type="date"
                   placeholder="Lieu"
+                  required
                 />
               </Col>
               <Col md="4" className="form-group">
@@ -171,6 +185,7 @@ class AttestationDeStage extends Component {
                   name="lieuLivraison"
                   type="text"
                   placeholder="Lieu"
+                  required
                 />
               </Col>
             </Row>
@@ -181,6 +196,8 @@ class AttestationDeStage extends Component {
             {this.state.toggleDownloadBtn ? <a href={downloadURL + this.state.generatedFileName} > <button title="Télécharger le fichier PDF généré" type="button" className="mb-2 mr-1 btn btn-outline-success"><i className="fa fa-download" aria-hidden="true"></i></button></a> : ""}
 
           </fieldset>
+          <ToastContainer />
+
         </Form>
 
       </div>);

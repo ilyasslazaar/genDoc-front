@@ -9,7 +9,9 @@ import Langue from './cv/Langue'
 import Distinction from './cv/Distinction'
 import Loisir from './cv/Loisir'
 import axios from 'axios'
-import { downloadFilesURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { downloadPDFURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
 import { handleAdd, handleRemove } from '../../commun'
 
 import {
@@ -27,7 +29,7 @@ class CV extends Component {
     distinctionSection: [{ value: 0 }],
     formData: {
       "signed": false,
-      "typeName": "CV",
+      "typeName": this.props.type,
       data: {
         contact: {},
         formations: [],
@@ -53,7 +55,6 @@ class CV extends Component {
       let distinctions = [], langues = [], competences = [], formations = [], experiences = []
 
       this.state.distinctionSection.map((item, i) => {
-
         const distinction =
         {
           "titre": event.target['titreDist' + i].value,
@@ -62,7 +63,6 @@ class CV extends Component {
           "annee": event.target['moisDist' + i].value + ' ' + event.target['anneeDist' + i].value
         }
         distinctions.push(distinction)
-
 
       })
       this.state.languageSection.map((item, i) => {
@@ -113,7 +113,6 @@ class CV extends Component {
           "societe": event.target['entreprise' + i].value,
         }
         experiences.push(experience)
-        console.log("index : ", i)
       })
       const contact = {
         "bio": event.target.bio.value,
@@ -130,43 +129,46 @@ class CV extends Component {
       currentState.data.distinctions = distinctions
       currentState.data.competences = competences
       currentState.data.contact = contact
-
       currentState.data.loisirs = event.target.loisirs.value.split(",")
-      console.log(currentState.data.loisirs)
-      console.log('experiences : ', experiences)
       this.setState({ formData: currentState }, () => {
-        axios.post(apiURL, {
-          responseType: 'arraybuffer',
+        axios.post(apiURL, null, {
           headers: {
+            Authorization: localStorage.getItem("token"),
             'Accept': 'application/pdf'
-          }
-        }, { params: { data: this.state.formData } }).then((response) => {
+          },
+          params: { data: this.state.formData }
+        }).then((response) => {
           if (response.status === 200) {
+
+            toast.success("Un nouveau CV a été crée !", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+
             this.setState({
               toggleDownloadBtn: true,
               generatedFileName: response.data
             });
           }
+        }).catch(function (error) {
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
       })
-      console.log(currentState)
-
-
     }
-
   }
   render() {
     return (
       <Form onSubmit={this.handleSubmit} id="form" >
         <Row style={styles}>
           <Col md="6">
-            <h4>Contact</h4>
+            <h5>Contact</h5>
           </Col>
         </Row>
         <Contact />
         <Row style={styles} >
           <Col md="6">
-            <h4>Formation</h4>
+            <h5>Formation</h5>
           </Col>
         </Row>
 
@@ -180,7 +182,7 @@ class CV extends Component {
         })}
         <Row style={styles} >
           <Col md="6">
-            <h4>Expérience</h4>
+            <h5>Expérience</h5>
           </Col>
         </Row>
         {this.state.experienceSection.map((field, idx) => {
@@ -194,7 +196,7 @@ class CV extends Component {
 
         <Row style={styles} >
           <Col md="6">
-            <h4>Compétence</h4>
+            <h5>Compétence</h5>
           </Col>
         </Row>
         {this.state.competenceSection.map((field, idx) => {
@@ -207,7 +209,7 @@ class CV extends Component {
         })}
         <Row style={styles} >
           <Col md="6">
-            <h4>Langues</h4>
+            <h5>Langues</h5>
           </Col>
         </Row>
         {this.state.languageSection.map((field, idx) => {
@@ -221,7 +223,7 @@ class CV extends Component {
 
         <Row style={styles} >
           <Col md="6">
-            <h4>Prix et distinctions</h4>
+            <h5>Prix et distinctions</h5>
           </Col>
         </Row>
         {this.state.distinctionSection.map((field, idx) => {
@@ -233,7 +235,7 @@ class CV extends Component {
         })}
         <Row style={styles} >
           <Col md="6">
-            <h4>Loisirs</h4>
+            <h5>Loisirs</h5>
           </Col>
         </Row>
         <div>
@@ -244,6 +246,7 @@ class CV extends Component {
           <Button outline theme="primary" className="mb-2 mr-1" type="submit">Générer le document</Button>
           <Button outline theme="secondary" className="mb-2 mr-1" type="reset">Vider les champs</Button>
           {this.state.toggleDownloadBtn ? <a href={downloadURL + this.state.generatedFileName} > <button title="Télécharger le fichier PDF généré" type="button" className="mb-2 mr-1 btn btn-outline-success"><i className="fa fa-download" aria-hidden="true"></i></button></a> : ""}
+          <ToastContainer />
 
         </fieldset>
       </Form>);

@@ -18,6 +18,7 @@ const Loisir = (props) => {
                         type="text"
                         name="loisirs"
                         placeholder="Ex : Sport, lecture ..."
+                        required
                     />
                 </Col>
 

@@ -11,45 +11,28 @@ const Societe = (props) => {
         <div>
             <Row style={props.styles} >
                 <Col md="6">
-                    <h4>{props.title}</h4>
+                    <h5>{props.title}</h5>
                 </Col>
             </Row>
             <fieldset className="my-fieldset">
 
                 <Row form>
                     <Col md="4" className="form-group" >
-                        <label >Numero de facture</label>
+                        <label >Numéro de facture</label>
                         <FormInput
                             name="numFacture"
                             type="text"
                             placeholder="N° Facture"
                         />
                     </Col>
+
                     <Col md="4" className="form-group" >
 
-                        <label >Nom de la société</label>
-                        <FormInput
-                            name="nomSociete"
-                            type="text"
-                        />
-                    </Col>
-                    <Col md="4" className="form-group" >
-
-                        <label >Numéro de telephone</label>
+                        <label >Numéro de téléphone</label>
                         <FormInput
                             type="text"
                             name="telSociete"
                             placeholder="N° fixe"
-                        />
-                    </Col>
-                </Row>
-                <Row form>
-                    <Col md="4" className="form-group" >
-                        <label >Adresse</label>
-                        <FormInput
-                            type="text"
-                            name="adresseSociete"
-                            placeholder="Adresse"
                         />
                     </Col>
                     <Col md="4" className="form-group" >
@@ -60,6 +43,8 @@ const Societe = (props) => {
                             type="email"
                         />
                     </Col>
+                </Row>
+                <Row form>
                     <Col md="4" className="form-group" >
                         <label >Siteweb</label>
                         <FormInput
@@ -68,6 +53,15 @@ const Societe = (props) => {
                             placeholder="EX"
                         />
                     </Col>
+                    <Col md="8" className="form-group" >
+                        <label >Adresse</label>
+                        <FormInput
+                            type="text"
+                            name="adresseSociete"
+                            placeholder="Adresse"
+                        />
+                    </Col>
+
                 </Row>
             </fieldset>
         </div>

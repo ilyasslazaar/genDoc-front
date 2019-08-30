@@ -2,7 +2,6 @@ import React from "react";
 import {
     Row,
     Col,
-    Form,
     FormInput,
     FormTextarea,
     FormSelect
@@ -25,6 +24,7 @@ const Experience = (props) => {
                         name={"entreprise" + props.idx}
                         type="text"
                         placeholder="Ex : Novelis."
+                        required
                     />
                 </Col>
             </Row>
@@ -36,6 +36,7 @@ const Experience = (props) => {
                         name={"poste" + props.idx}
                         type="text"
                         placeholder="Ex : Développeur Java/JEE."
+                        required
                     />
                 </Col>
                 <Col md="6" className="form-group" >
@@ -45,6 +46,7 @@ const Experience = (props) => {
                         name={"lieu" + props.idx}
                         type="text"
                         placeholder="Lieu"
+                        required
                     />
                 </Col>
 
@@ -55,7 +57,7 @@ const Experience = (props) => {
                 <Col md="3" className="form-group" >
                     <label >Date de début</label>
 
-                    <FormSelect name={"anneeDebutExperience" + props.idx}>
+                    <FormSelect name={"anneeDebutExperience" + props.idx} required>
                         <option disabled selected>Année</option>
                         {years.map((year) =>
 
@@ -64,7 +66,7 @@ const Experience = (props) => {
                 </Col>
                 <Col md="3" className="form-group" >
                     <label style={style}>Mois</label>
-                    <FormSelect name={"moisDebutExperience" + props.idx}>
+                    <FormSelect name={"moisDebutExperience" + props.idx} required>
                         <option disabled selected>Mois</option>
                         {months.map((month) =>
 
@@ -74,7 +76,7 @@ const Experience = (props) => {
                 <Col md="3" className="form-group" >
                     <label >Date de fin</label>
 
-                    <FormSelect name={"anneeFinExperience" + props.idx}>
+                    <FormSelect name={"anneeFinExperience" + props.idx} required>
                         <option disabled selected>Année</option>
                         {years.map((year) =>
 
@@ -83,7 +85,7 @@ const Experience = (props) => {
                 </Col>
                 <Col md="3" className="form-group" >
                     <label style={style}>Mois</label>
-                    <FormSelect name={"moisFinExperience" + props.idx}>
+                    <FormSelect name={"moisFinExperience" + props.idx} required>
                         <option disabled selected>Mois</option>
                         {months.map((month) =>
 
@@ -103,6 +105,7 @@ const Experience = (props) => {
                         name={"description" + props.idx}
                         type="textarea"
                         placeholder=""
+                        required
                     />
                 </Col>
             </Row>

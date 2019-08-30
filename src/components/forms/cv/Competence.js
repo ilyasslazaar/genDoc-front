@@ -2,7 +2,6 @@ import React from "react";
 import {
     Row,
     Col,
-    Form,
     FormInput,
 } from "shards-react";
 
@@ -18,6 +17,7 @@ const Competence = (props) => {
                         name={"titreCompetence" + props.idx}
                         type="text"
                         placeholder="Ex : Technologies Web, Langages de programmation ..."
+                        required
                     />
                 </Col>
                 <Col md="6" className="form-group" >
@@ -27,6 +27,7 @@ const Competence = (props) => {
                         name={"competences" + props.idx}
                         type="text"
                         placeholder="EX : PHP, JEE ..."
+                        required
                     />
                 </Col>
             </Row>

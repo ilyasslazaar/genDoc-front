@@ -5,14 +5,10 @@ import {
   FormInput,
   FormTextarea
 } from "shards-react";
-const styles = {
-  padding: "10px"
-}
 
 const Contact = () => (
-  
   <fieldset className="contact-fieldset">
-       
+
     <Row form>
       <Col className="form-group" >
 
@@ -21,7 +17,7 @@ const Contact = () => (
           name="nom"
           type="text"
           placeholder="Nom"
-        />
+          required />
       </Col>
       <Col className="form-group" >
         <label htmlFor="fePrenomResponsable">Prénom</label>
@@ -30,7 +26,7 @@ const Contact = () => (
           name="prenom"
           type="text"
           placeholder="Prénom"
-        />
+          required />
       </Col>
     </Row>
     <Row form>
@@ -41,6 +37,7 @@ const Contact = () => (
           name="fonction"
           type="text"
           placeholder="Fonction"
+          required
         />
       </Col>
       <Col md="6" className="form-group">
@@ -49,6 +46,7 @@ const Contact = () => (
           name="adresse"
           type="text"
           placeholder="Adresse"
+          required
         />
       </Col>
     </Row>
@@ -60,14 +58,16 @@ const Contact = () => (
           type="email"
           name="email"
           placeholder="Email"
+          required
         />
       </Col>
       <Col md="6" className="form-group">
-        <label htmlFor="feFonctionResponsable">Telephone</label>
+        <label htmlFor="feFonctionResponsable">Téléphone</label>
         <FormInput
           type="tel"
           name="tel"
-          placeholder="N° Telephone"
+          placeholder="N° Téléphone"
+          required
         />
       </Col>
     </Row>
@@ -80,6 +80,7 @@ const Contact = () => (
           name="bio"
           type="textarea"
           placeholder="Résumé"
+          required
         />
       </Col>
     </Row>

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import '../../assets/style.css';
 import Responsable from './responsable/Responsable'
-import { downloadFilesURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { downloadPDFURL as downloadURL, gendocServiceURL as apiURL, styles } from '../../constants/defaultValues'
 import axios from "axios";
 
 import {
@@ -25,7 +27,7 @@ class AttestationDeTravail extends Component {
         this.setState({
             formData: {
                 "signed": event.target.signature.value,
-                "typeName": "ATTESTATION_DE_TRAVAIL",
+                "typeName": this.props.type,
                 "data": {
                     "lieuLivraison": event.target.lieuLivraison.value,
                     "dateLivraison": event.target.dateLivraison.value,
@@ -48,24 +50,30 @@ class AttestationDeTravail extends Component {
                 },
             }
         }, () => {
-            axios.post(apiURL, {
-                responseType: 'arraybuffer',
+            axios.post(apiURL, null, {
                 headers: {
+                    Authorization: localStorage.getItem("token"),
                     'Accept': 'application/pdf'
+                },
+                params: {
+                    data: this.state.formData
                 }
-            },
-                {
-                    params: {
-                        data: this.state.formData
-                    }
-                }).then((response) => {
-                    if (response.status == 200) {
-                        this.setState({
-                            toggleDownloadBtn: true,
-                            generatedFileName: response.data
-                        });
-                    }
+            }
+            ).then((response) => {
+                if (response.status == 200) {
+                    toast.success("Une nouvelle attestation de travail a été crée !", {
+                        position: toast.POSITION.TOP_RIGHT,
+                    });
+                    this.setState({
+                        toggleDownloadBtn: true,
+                        generatedFileName: response.data
+                    });
+                }
+            }).catch(function (error) {
+                toast.error(error.message, {
+                    position: toast.POSITION.TOP_RIGHT,
                 });
+            });
         })
     }
 
@@ -73,7 +81,7 @@ class AttestationDeTravail extends Component {
         return (<div>
             <Row style={styles} >
                 <Col md="6">
-                    <h4>Responsable</h4>
+                    <h5>Responsable</h5>
                 </Col>
             </Row>
             <Form onSubmit={this.handleSubmit}>
@@ -81,7 +89,7 @@ class AttestationDeTravail extends Component {
 
                 <Row style={styles} >
                     <Col md="6">
-                        <h4>Collaborateur</h4>
+                        <h5>Collaborateur</h5>
                     </Col>
                 </Row>
                 <fieldset className="my-fieldset">
@@ -90,7 +98,7 @@ class AttestationDeTravail extends Component {
 
                             <label htmlFor="fePrenomStagiaire">Civilité</label>
 
-                            <FormSelect name="civiliteCollaborateur">
+                            <FormSelect name="civiliteCollaborateur" required>
                                 <option value="Mr">Mr</option>
                                 <option value="Mme">Mme</option>
                                 <option value="Mlle">Mlle</option>
@@ -103,6 +111,7 @@ class AttestationDeTravail extends Component {
                                 type="text"
                                 name="nomCollaborateur"
                                 placeholder="Nom"
+                                required
                             />
                         </Col>
                     </Row>
@@ -114,6 +123,7 @@ class AttestationDeTravail extends Component {
                                 name="prenomCollaborateur"
                                 type="text"
                                 placeholder="Prénom"
+                                required
                             />
                         </Col>
                         <Col md="6" className="form-group">
@@ -122,6 +132,7 @@ class AttestationDeTravail extends Component {
                                 name="cinCollaborateur"
                                 type="text"
                                 placeholder="N° CIN"
+                                required
                             />
                         </Col>
                     </Row>
@@ -133,6 +144,7 @@ class AttestationDeTravail extends Component {
                                 name="cnssCollaborateur"
                                 type="text"
                                 placeholder="N° CNSS"
+                                required
                             />
                         </Col>
                         <Col md="4" className="form-group">
@@ -141,6 +153,7 @@ class AttestationDeTravail extends Component {
                                 type="text"
                                 name="posteCollaborateur"
                                 placeholder="EX : Ingénieur ..."
+                                required
                             />
                         </Col>
 
@@ -149,6 +162,7 @@ class AttestationDeTravail extends Component {
                             <FormInput
                                 name="dateDebut"
                                 type="month"
+                                required
                             />
                         </Col>
                     </Row>
@@ -157,7 +171,7 @@ class AttestationDeTravail extends Component {
                         <Col md="4" className="form-group">
 
                             <label htmlFor="feSignature">Signature</label>
-                            <FormSelect name="signature">
+                            <FormSelect name="signature" required>
                                 <option value="true">Oui</option>
                                 <option value="false">Non</option>
                             </FormSelect>
@@ -169,6 +183,7 @@ class AttestationDeTravail extends Component {
                                 name="dateLivraison"
                                 type="date"
                                 placeholder="Lieu"
+                                required
                             />
                         </Col>
                         <Col md="4" className="form-group">
@@ -177,6 +192,7 @@ class AttestationDeTravail extends Component {
                                 name="lieuLivraison"
                                 type="text"
                                 placeholder="Lieu"
+                                required
                             />
                         </Col>
                     </Row>
@@ -185,6 +201,8 @@ class AttestationDeTravail extends Component {
 
                     {this.state.toggleDownloadBtn ? <a href={downloadURL + this.state.generatedFileName} > <button title="Télécharger le fichier PDF généré" type="button" class="mb-2 mr-1 btn btn-outline-success"><i class="fa fa-download" aria-hidden="true"></i></button></a> : ""}
                 </fieldset>
+                <ToastContainer />
+
             </Form>
         </div>
         );

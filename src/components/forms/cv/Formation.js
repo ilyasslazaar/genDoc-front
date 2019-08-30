@@ -1,20 +1,15 @@
 import React from "react";
-import { Field, FieldArray, reducer as reduxFormReducer, reduxForm } from 'redux-form'
 import { years } from '../../../constants/defaultValues'
 
 import {
     Row,
     Col,
-    Form,
     FormInput,
     FormSelect,
     FormTextarea
 } from "shards-react";
 
-
 const Formation = (props) => {
-
-
     return (
         <fieldset className="my-fieldset">
 
@@ -29,6 +24,7 @@ const Formation = (props) => {
                         type="text"
                         name={"etablissement" + props.idx}
                         placeholder="Ex : Université Paris V."
+                        required
                     />
                 </Col>
             </Row>
@@ -40,6 +36,7 @@ const Formation = (props) => {
                         type="text"
                         name={"diplome" + props.idx}
                         placeholder="Ex : Licence..."
+                        required
                     />
                 </Col>
                 <Col md="6" className="form-group" >
@@ -49,6 +46,7 @@ const Formation = (props) => {
                         name={"lieuFormation" + props.idx}
                         type="text"
                         placeholder="Lieu de la formation."
+                        required
                     />
                 </Col>
 
@@ -58,22 +56,22 @@ const Formation = (props) => {
                 <Col md="6" className="form-group" >
 
                     <label >Année de début</label>
-                    <FormSelect name={"anneeDebutFormation" + props.idx}>
+                    <FormSelect name={"anneeDebutFormation" + props.idx} required>
                         <option disabled selected>Année</option>
                         {years.map((year) =>
 
-                            <option value={year}>{year}</option>)}x
-                </FormSelect>
+                            <option value={year}>{year}</option>)}
+                    </FormSelect>
 
                 </Col>
                 <Col md="6" className="form-group" >
 
                     <label >Année de fin</label>
-                    <FormSelect name={"anneeFinFormation" + props.idx}>
+                    <FormSelect name={"anneeFinFormation" + props.idx} required>
                         <option disabled selected>Année</option>
                         {years.map((year) =>
-                            <option value={year + 5}>{year + 5}</option>)}x
-                </FormSelect>
+                            <option value={year + 5}>{year + 5}</option>)}
+                    </FormSelect>
                 </Col>
 
             </Row>
@@ -89,6 +87,7 @@ const Formation = (props) => {
                         type="textarea"
                         name={"descriptionFormation" + props.idx}
                         placeholder="Description de la formation."
+                        required
                     />
                 </Col>
             </Row>
